@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resources</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --deep-red: #8b0000;
+        --gold: #c5a059;
+        --dark-green: #0f3210;
+        --beige: #cbbda1;
+        --dark-bg: #1c1c1c;
+        --card-dark: #1f1f1f;
+        --text-dark: #222;
+        --text-light: #fff;
+    }
+
+    body {
+        margin: 0;
+        font-family: "Montserrat", sans-serif;
+        background: var(--beige);
+        color: var(--text-dark);
+        display: flex;
+        height: 100vh;
+        transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark {
+        background: var(--dark-bg);
+        color: var(--text-light);
+    }
+
+    body.dark .sidebar {
+        background: var(--dark-bg);
+        border-right-color: var(--gold);
+    }
+
+    body.dark .sidebar input {
+        background: var(--card-dark);
+        color: var(--text-light);
+        border-color: var(--mustard);
+    }
+
+    body.dark .main {
+        background: var(--dark-bg);
+    }
+
+    body.dark .resource-card {
+        background: var(--card-dark);
+        border-color: var(--gold);
+    }
+
+    body.dark .modal {
+        background: var(--card-dark);
+        color: var(--text-light);
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 260px;
+        background: var(--beige);
+        padding: 20px;
+        border-right: 2px solid var(--dark-green);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .sidebar input {
+        padding: 10px;
+        border: 2px solid var(--dark-green);
+        background: #fff;
+        font-family: "Almendra", serif;
+        font-size: 16px;
+    }
+
+    .filter-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-family: "Almendra", serif;
+    }
+
+    .filters label {
+        display: block;
+        margin: 6px 0;
+        cursor: pointer;
+    }
+
+    /* Main content */
+    .main {
+        flex: 1;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1 {
+        font-family: "Almendra", serif;
+        color: var(--dark-green);
+    }
+
+     body.dark h1 {
+        color: var(--gold);
+     }
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .user-info {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .user-info input {
+        padding: 6px;
+        border: 2px solid var(--dark-green);
+        font-family: "Montserrat", sans-serif;
+    }
+
+    .user-info button {
+        padding: 6px 10px;
+        border: 2px solid var(--deep-red);
+        background: var(--gold);
+        cursor: pointer;
+        font-family: "Almendra", serif;
+    }
+
+    .dark-toggle {
+        padding: 6px 10px;
+        border: 2px solid var(--dark-green);
+        background: var(--beige);
+        cursor: pointer;
+        font-family: "Almendra", serif;
+        color: var(--dark-green);
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    body.dark .dark-toggle {
+        background: var(--card-dark);
+        color: var(--text-light);
+        border-color: var(--gold);
+    }
+
+    .dark-toggle:hover {
+        background-color: var(--gold);
+        color: var(--text-dark);
+    }
+
+    body.dark .dark-toggle:hover {
+        background-color: var(--deep-red);
+    }
+
+    .main-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .main-header h1 {
+        margin: 0;
+        font-size: 32px;
+        color: var(--dark-green);
+    }
+
+    body.dark .main-header h1 {
+        color: var(--gold);
+    }
+
+    /* Create Resource Icon */
+    .create-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--gold);
+        border: 2px solid var(--dark-green);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 26px;
+        cursor: pointer;
+    }
+
+    /* Resource Grid */
+    .resource-grid {
+        margin-top: 25px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    .resource-card {
+        background: #fff;
+    
+        padding: 15px;
+        border-radius: 6px;
+        transition: 0.2s;
+    }
+
+    .resource-card:hover {
+        transform: scale(1.02);
+        border-color: var(--deep-red);
+        border: 2px solid var(--deep-red);
+    }
+
+    .resource-type {
+        font-size: 14px;
+        color: var(--dark-green);
+        margin-bottom: 5px;
+        text-transform: capitalize;
+    }
+
+    body.dark .resource-type {
+        color: var(--gold);
+    }
+
+    .resource-title {
+        font-size: 20px;
+        margin-bottom: 6px;
+    }
+
+    .resource-meta {
+        font-size: 12px;
+        opacity: 0.8;
+        margin-bottom: 8px;
+    }
+
+    .resource-actions button {
+        margin-top: 10px;
+        padding: 8px 12px;
+        border: 2px solid var(--deep-red);
+        background: var(--gold);
+        cursor: pointer;
+        font-family: "Almendra", serif;
+    }
+
+    /* Modal */
+    .modal-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal {
+        background: #fff;
+        padding: 20px;
+        border: 3px solid var(--dark-green);
+        width: 350px;
+        border-radius: 8px;
+    }
+
+    .modal h2 {
+        margin-top: 0;
+    }
+
+    .modal input, .modal select {
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        border: 2px solid var(--dark-green);
+        font-family: "Almendra", serif;
+    }
+
+    .modal label {
+        display: block;
+        margin: 8px 0;
+    }
+
+    .modal button {
+        padding: 10px 14px;
+        background: var(--gold);
+        border: 2px solid var(--deep-red);
+        cursor: pointer;
+        font-family: "Almendra", serif;
+        margin-right: 8px;
+    }
+</style>
+</head>
+
+<body>
+<!-- Navigation Bar -->
+<style> 
+    .navbar {
+        width: 100%;
+        background: var(--beige);
+        border-bottom: 2px solid var(--dark-green);
+        padding: 5px 30px;
+        display: flex;
+        justify-content: space-between;
+    
+        align-items: center;
+        font-family: "Almendra", serif;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+    body.dark .navbar {
+        background: var(--dark-bg);
+        border-bottom-color: var(--gold);
+    }
+
+    .nav-logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--dark-green);
+       flex:1;
+    }
+
+    body.dark .nav-logo {
+        color: var(--gold);
+    }
+
+    .nav-links {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 20px;
+        flex:2;
+       margin: 0px;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: var(--dark-green);
+        font-size: 16px;
+        transition: color 0.3s;
+        
+    }
+    
+    .nav-right {
+        display:flex;
+        justify-content: flex-end;
+        margin-right: 100px;
+    }
+
+
+    body.dark .nav-links a {
+        color: var(--text-light);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+        color: var(--deep-red);
+    }
+
+    body {
+        padding-top: 70px;
+    }
+</style>
+<nav class="navbar">
+    <div class="nav-logo"><a href="StudentDashboard.html"><img src="logo-2.png" alt="RevoLoot" width="100px"></a></div>
+    
+    <div class="nav-links">
+        <a href="about.html">About</a>
+        <a href="Resources Page.html" class="active">Resources</a>
+        <a href="Schedule Page.html">Schedule</a>
+        <button class="dark-toggle" id="darkToggle">Dark Mode</button>
+    </div>
+   
+     
+  <!-- Right Side: Empty spacer to balance the layout -->
+  <div class="nav-right"></div>
+</nav> 
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <input id="searchInput" type="text" placeholder="Search resources...">
+    
+
+    <div class="filter-title">Filter by Type</div>
+    <div class="filters">
+        <label><input type="checkbox" class="filter" value="flashcards"> Flashcards</label>
+        <label><input type="checkbox" class="filter" value="study guide"> Study Guides</label>
+        <label><input type="checkbox" class="filter" value="recording"> Recordings</label>
+        <label><input type="checkbox" class="filter" value="discussion"> Forum Discussions</label>
+        <label><input type="checkbox" class="filter" value="timeline"> Timelines</label>
+        <label><input type="checkbox" class="filter" value="lesson"> Lessons</label>
+        <label><input type="checkbox" class="filter" value="video"> Videos</label>
+        <label><input type="checkbox" class="filter" value="quiz"> Quizzes</label>
+        <label><input type="checkbox" class="filter" value="download"> Downloadables</label>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+    <div class="top-bar">
+        <div class="user-info">
+            <input id="usernameInput" type="text" placeholder="Enter username">
+            <button id="loginBtn">Set User</button>
+            <span id="currentUserLabel"></span>
+        </div>
+        
+    </div>
+
+    <div class="main-header">
+        <h1>Resources</h1>
+        <div class="create-icon" id="openModal">+</div>
+    </div>
+
+    <div id="resourceGrid" class="resource-grid"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal-bg" id="modalBg">
+    <div class="modal">
+        <h2>Create Resource</h2>
+        <input id="newTitle" type="text" placeholder="Resource Title">
+        <select id="newType">
+            <option value="lesson">Lesson</option>
+            <option value="video">Video</option>
+            <option value="quiz">Quiz</option>
+            <option value="flashcards">Flashcards</option>
+            <option value="study guide">Study Guide</option>
+            <option value="recording">Recording</option>
+            <option value="discussion">Forum Discussion</option>
+            <option value="timeline">Timeline</option>
+            <option value="download">Downloadable</option>
+        </select>
+
+        <label>
+            <input type="checkbox" id="publicToggle" checked>
+            Make public to all users
+        </label>
+
+        <button id="createBtn">Create</button>
+        <button id="cancelBtn">Cancel</button>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY_RESOURCES = "study_resources";
+    const STORAGE_KEY_USER = "study_current_user";
+    const STORAGE_KEY_DARK = "darkMode";
+
+    const grid = document.getElementById("resourceGrid");
+    const searchInput = document.getElementById("searchInput");
+    const filters = document.querySelectorAll(".filter");
+
+    const modalBg = document.getElementById("modalBg");
+    const openModal = document.getElementById("openModal");
+    const createBtn = document.getElementById("createBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+
+    const usernameInput = document.getElementById("usernameInput");
+    const loginBtn = document.getElementById("loginBtn");
+    const currentUserLabel = document.getElementById("currentUserLabel");
+
+    const darkToggle = document.getElementById("darkToggle");
+
+    let resources = [];
+    let currentUser = null;
+
+    function loadInitialData() {
+        const storedResources = localStorage.getItem(STORAGE_KEY_RESOURCES);
+        if (storedResources) {
+            resources = JSON.parse(storedResources);
+        } else {
+            resources = [
+                { id: 1, title: "French Revolution Timeline", type: "timeline", owner: "system", isPublic: true },
+                { id: 2, title: "WW2 Figures Flashcards", type: "flashcards", owner: "system", isPublic: true },
+                { id: 3, title: "Study Guide: Declaration of Independence 101", type: "study guide", owner: "system", isPublic: true },
+                { id: 4, title: "The Great Depression: Recorded Study Session #3", type: "recording", owner: "system", isPublic: true },
+                { id: 5, title: "Forum Discussion: 1700s Literature", type: "discussion", owner: "system", isPublic: true },
+                { id: 6, title: "Flashcards: World Capitals", type: "flashcards", owner: "system", isPublic: true },
+                { id: 7, title: "Lesson: Understand Slavery and its Impact", type: "lesson", owner: "system", isPublic: true },
+                { id: 8, title: "Video: Where Settlers Got Their Government (Hint: It wasn't from the British!)", type: "video", owner: "system", isPublic: true },
+                { id: 9, title: "Quiz: Ancient Civilizations", type: "quiz", owner: "system", isPublic: true },
+                { id: 10, title: "Download: MLA Format Template", type: "download", owner: "system", isPublic: true }
+            ];
+            saveResources();
+        }
+
+        const storedUser = localStorage.getItem(STORAGE_KEY_USER);
+        if (storedUser) {
+            currentUser = storedUser;
+            usernameInput.value = currentUser;
+            updateUserLabel();
+        }
+
+        const storedDark = localStorage.getItem(STORAGE_KEY_DARK);
+        if (storedDark === "true") {
+            document.body.classList.add("dark");
+        }
+    }
+
+    function saveResources() {
+        localStorage.setItem(STORAGE_KEY_RESOURCES, JSON.stringify(resources));
+    }
+
+    function updateUserLabel() {
+        if (currentUser) {
+            currentUserLabel.textContent = `Current user: ${currentUser}`;
+        } else {
+            currentUserLabel.textContent = "";
+        }
+    }
+
+    function renderResources() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const activeFilters = [...filters].filter(f => f.checked).map(f => f.value);
+
+        grid.innerHTML = "";
+
+        resources
+            .filter(r => {
+                if (!r.isPublic && r.owner !== currentUser) return false;
+                return true;
+            })
+            .filter(r => r.title.toLowerCase().includes(searchTerm))
+            .filter(r => activeFilters.length === 0 || activeFilters.includes(r.type))
+            .forEach(r => {
+                const card = document.createElement("div");
+                card.className = "resource-card";
+                const visibility = r.isPublic ? "Public" : "Private";
+                const ownerText = r.owner ? r.owner : "Unknown";
+                card.innerHTML = `
+                    <div class="resource-type">${r.type}</div>
+                    <div class="resource-title">${r.title}</div>
+                    <div class="resource-meta">Owner: ${ownerText} • ${visibility}</div>
+                    <div class="resource-actions">
+                        <button>Open</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+    }
+
+    searchInput.addEventListener("input", renderResources);
+    filters.forEach(f => f.addEventListener("change", renderResources));
+
+    // Modal logic
+    openModal.onclick = () => {
+        if (!currentUser) {
+            alert("Set a username first so we can assign the resource to you.");
+            return;
+        }
+        modalBg.style.display = "flex";
+    };
+
+    cancelBtn.onclick = () => {
+        modalBg.style.display = "none";
+    };
+
+    modalBg.onclick = (e) => {
+        if (e.target === modalBg) modalBg.style.display = "none";
+    };
+
+    createBtn.onclick = () => {
+        const title = document.getElementById("newTitle").value.trim();
+        const type = document.getElementById("newType").value;
+        const isPublic = document.getElementById("publicToggle").checked;
+
+        if (title === "") {
+            alert("Please enter a title.");
+            return;
+        }
+
+        const newResource = {
+            id: Date.now(),
+            title,
+            type,
+            owner: currentUser || "unknown",
+            isPublic
+        };
+
+        resources.push(newResource);
+        saveResources();
+        renderResources();
+        document.getElementById("newTitle").value = "";
+        document.getElementById("newType").value = "lesson";
+        document.getElementById("publicToggle").checked = true;
+        modalBg.style.display = "none";
+    };
+
+    // User logic
+    loginBtn.onclick = () => {
+        const name = usernameInput.value.trim();
+        if (!name) {
+            alert("Please enter a username.");
+            return;
+        }
+        currentUser = name;
+        localStorage.setItem(STORAGE_KEY_USER, currentUser);
+        updateUserLabel();
+        renderResources();
+    };
+
+    // Dark mode
+    darkToggle.onclick = () => {
+        document.body.classList.toggle("dark");
+        const isDark = document.body.classList.contains("dark");
+        localStorage.setItem(STORAGE_KEY_DARK, isDark ? "true" : "false");
+    };
+
+    loadInitialData();
+    renderResources();
+</script>
+
+</body>
