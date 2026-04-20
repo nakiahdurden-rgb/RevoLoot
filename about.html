@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>About</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --deep-red: #8b0000;
+            --gold: #c5a059;
+            --dark-green: #0f3210;
+            --beige: #cbbda1;
+            --dark-bg: #1c1c1c;
+            --card-dark: #1f1f1f;
+            --text-dark: #222;
+            --text-light: #fff;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Montserrat", sans-serif;
+            background: var(--beige);
+            color: var(--text-dark);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark {
+            background: var(--dark-bg);
+            color: var(--text-light);
+        }
+
+        body.dark .navbar {
+            background: var(--dark-bg);
+            border-bottom-color: var(--gold);
+        }
+
+        body.dark .nav-logo {
+            color: var(--gold);
+        }
+
+        body.dark .nav-links a {
+            color: var(--text-light);
+        }
+
+        body.dark .dark-toggle {
+            background: var(--card-dark);
+            color: var(--text-light);
+            border-color: var(--gold);
+        }
+
+        body.dark .dark-toggle:hover {
+            background-color: var(--deep-red);
+        }
+
+        .navbar {
+            width: 100%;
+            background: var(--beige);
+            border-bottom: 2px solid var(--dark-green);
+            padding: 5px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: "Almendra", serif;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--dark-green);
+            flex: 1;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 20px;
+            flex: 2;
+            margin: 0px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-green);
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        .nav-right {
+            display: flex;
+            justify-content: flex-end;
+            margin-right: 100px;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--deep-red);
+        }
+
+        .dark-toggle {
+            padding: 6px 10px;
+            border: 2px solid var(--dark-green);
+            background: var(--beige);
+            cursor: pointer;
+            font-family: "Almendra", serif;
+            color: var(--dark-green);
+            font-weight: bold;
+            transition: 0.3s;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .dark-toggle:hover {
+            background-color: var(--gold);
+            color: var(--text-dark);
+        }
+
+        .main {
+            padding: 110px 30px 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: var(--dark-green);
+            font-family: "Almendra", serif;
+        }
+
+        body.dark h1 {
+            color: var(--gold);
+        }
+
+        h3 {
+            color: var(--dark-green);
+            font-family: "Almendra", serif;
+            margin: 20px auto;
+            font-style: italic;
+        }
+        
+        body.dark h3 {
+            color: var(--gold);
+        }
+        p {
+            line-height: 1.6;
+            max-width: 45rem;
+            text-align: center;
+            margin: 20px auto;
+        }
+        h1, h3 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">
+            <a href="StudentDashboard.html"><img src="logo-2.png" alt="RevoLoot" width="100px"></a>
+        </div>
+
+        <div class="nav-links">
+            <a href="about.html" class="active">About</a>
+            <a href="Resources Page.html">Resources</a>
+            <a href="Schedule Page.html">Schedule</a>
+            <button class="dark-toggle" id="darkToggle">Dark Mode</button>
+        </div>
+        <div class="nav-right"> <!-- Empty div to push the dark mode button to the left --> 
+        </div>
+    </nav>
+
+    <main class="main">
+        <h1>About RevoLoot</h1>
+       <p> RevoLoot is a project for the 2026 the Website Design FBLA competition. This website will be presented at my state competition. I completed this project as a learning prerequisite for a passion project I have in mind. I wanted to test my skills in a real-world application. </p>
+       <br>
+       <br>
+    
+       <h3>What is RevoLoot?</h3>
+       <p>RevoLoot is a student learning hub designed to provide an engaging and interactive experience for history students. I am a passionate lover of history and believe anyone can appreciate the importance of understanding our past. History is a beautiful amalgamation of the good and evil humanity is capable of. It shows up what makes us human.</p>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkToggle = document.getElementById('darkToggle');
+            if (!darkToggle) return;
+
+            darkToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                document.body.classList.toggle('dark');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+            });
+
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark');
+            }
+        });
+    </script>
+</body>
+</html>

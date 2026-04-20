@@ -1,0 +1,1345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pirate Student Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#cbbda1; /* beige background */
+    --panel:#0f3210; /* dark green */
+    --accent:#8b0000; /* dark red */
+    --gold:#c5a059; /* gold */
+    --muted:#1c1c1c; 
+    --dark-bg: #1c1c1c;
+    --card-dark: #1f1f1f;
+    --text-dark: #222;
+    --text-light: #fff;
+    --card:#fff8ef;
+    --glass: rgba(255,255,255,0.06);
+    --shadow: 0 6px 18px rgba(0,0,0,0.12);
+    --radius:12px;
+    --dark-green: #0f3210; /* dark green */
+    --deep-red: #8b0000; /* dark red */
+    --beige: #cbbda1; /* beige */
+    font-family: Montserrat, sans-serif; 
+  }
+
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#e6dcc8);color:#1b1b1b}
+  
+  body.dark {
+    background: var(--dark-bg);
+    color: var(--text-light);
+  }
+
+  body.dark .left,
+  body.dark .right .card,
+  body.dark .center .card {
+    background: var(--card-dark);
+    color: var(--text-light);
+  }
+
+  body.dark .card h3 {
+    color: var(--gold);
+  }
+
+  body.dark .username {
+    color: var(--gold);
+  }
+
+  body.dark .bio {
+    color: var(--text-light);
+  }
+
+  body.dark .muted {
+    color: var(--text-light);
+    opacity: 0.7;
+  }
+
+  body.dark .topic {
+    background: var(--card-dark);
+    color: var(--text-light);
+    border-color: var(--gold);
+  }
+
+  body.dark .avatar-btn {
+    background: url('background.png') no-repeat center center / cover;
+    border-color: var(--gold);
+  }
+
+  body.dark .assignment {
+    background: rgba(255,255,255,0.05);
+  }
+
+  body.dark .assignment .title {
+    color: var(--text-light);
+  }
+
+  body.dark .assignment .due {
+    color: var(--text-light);
+    opacity: 0.7;
+  }
+
+  body.dark .progress {
+    background: rgba(255,255,255,0.1);
+  }
+
+  body.dark .btn.ghost {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  body.dark .day {
+    background: rgba(255,255,255,0.05);
+    border-color: var(--gold);
+  }
+
+  body.dark .day .date {
+    color: var(--text-light);
+  }
+
+  body.dark .shipmate {
+    background: rgba(255,255,255,0.05);
+  }
+
+  body.dark .shipmate .name {
+    color: var(--text-light);
+  }
+
+  body.dark .shipmate .meta {
+    color: var(--text-light);
+    opacity: 0.7;
+  }
+
+  body.dark .shipmate img {
+    border-color: var(--gold);
+  }
+
+  body.dark .modal {
+    background: var(--card-dark);
+  }
+
+  body.dark .custom-preview {
+    background: var(--card-dark);
+  }
+
+  body.dark .preview-stage {
+    background: var(--dark-bg);
+    border-color: var(--gold);
+  }
+
+  body.dark .controls strong {
+    color: var(--gold);
+  }
+
+  body.dark .option {
+    background: var(--dark-bg);
+    border-color: var(--gold);
+  }
+
+  body.dark input[type="text"],
+  body.dark textarea,
+  body.dark input[type="date"] {
+    background: var(--dark-bg);
+    color: var(--text-light);
+    border-color: var(--gold);
+  }
+
+  body.dark .modal-footer .muted {
+    color: var(--text-light);
+    opacity: 0.7;
+  }
+
+  .app{
+    display:flex;
+    gap:20px;
+    padding:28px;
+    max-width:1200px;
+    margin:0 auto;
+    margin-top: 70px;
+  }
+
+  /* Left column: avatar + profile */
+  .left {
+    width:320px;
+    background:linear-gradient(180deg,var(--card),#f6efe0);
+    border-radius:var(--radius);
+    padding:18px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .avatar-wrap{
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+
+  /* Avatar preview is a clickable button */
+  .avatar-btn{
+    width:140px;height:140px;border-radius:12px;border:4px solid var(--panel);
+    background: url('background.png') no-repeat center center / cover;
+    display:grid;place-items:center;cursor:pointer;position:relative;overflow:hidden;
+  }
+  .avatar-btn img.layer{
+    position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;
+    pointer-events:none;
+  }
+  .avatar-meta{
+    flex:1;
+  }
+  .username{
+    font-weight:700;font-size:1.15rem;color:var(--panel);
+  }
+  .bio{
+    font-size:0.9rem;color:var(--muted);margin-top:6px;
+  }
+
+  .topics{
+    display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;
+  }
+  .topic{
+    background:linear-gradient(180deg,#fff,#f7f1e6);
+    border:2px solid rgba(0,0,0,0.04);
+    padding:6px 10px;border-radius:999px;font-weight:600;color:var(--panel);cursor:pointer;
+  }
+  .topic.active{background:var(--accent);color:#fff;border-color:rgba(0,0,0,0.08);box-shadow:0 4px 10px rgba(139,31,31,0.12)}
+
+  /* Center column: assignments + calendar */
+  .center{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .card{
+    background:linear-gradient(180deg,#fff,#f9f3e8);
+    border-radius:var(--radius);
+    padding:14px;
+    box-shadow:var(--shadow);
+  }
+
+  .card h3{margin:0 0 8px 0;color:var(--panel)}
+  .assignments-list{display:flex;flex-direction:column;gap:10px}
+  .assignment{
+    display:flex;align-items:center;gap:12px;padding:8px;border-radius:10px;background:rgba(0,0,0,0.02);
+  }
+  .assignment .meta{flex:1}
+  .assignment .title{font-weight:700;color:#222}
+  .assignment .due{font-size:0.85rem;color:var(--muted)}
+  .progress{
+    height:10px;background:#eee;border-radius:999px;overflow:hidden;width:180px;border:1px solid rgba(0,0,0,0.04)
+  }
+  .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#f0c24a);width:0%}
+
+  .assignment .actions{display:flex;gap:8px;align-items:center}
+  .btn{
+    background:var(--panel);color:#fff;padding:8px 10px;border-radius:8px;border:none;cursor:pointer;font-weight:700;
+  }
+  .btn.ghost{background:transparent;color:var(--panel);border:2px solid var(--panel)}
+  .btn.ghost:hover{border-color:var(--deep-red);color:var(--deep-red)}
+  .small{padding:6px 8px;font-size:0.9rem}
+
+  /* Calendar grid (simple) */
+  .calendar-grid{
+    display:grid;grid-template-columns:repeat(7,1fr);gap:6px;
+  }
+  .day{
+    background:#fff;border-radius:8px;padding:8px;min-height:80px;border:1px solid rgba(0,0,0,0.04);
+  }
+  .day .date{font-weight:700;color:var(--muted);font-size:0.9rem}
+  .event-pill{display:block;background:var(--accent);color:#fff;padding:4px 6px;border-radius:8px;margin-top:6px;font-size:0.8rem;cursor:pointer}
+
+  /* Right column: shipmates */
+  .right{
+    width:260px;display:flex;flex-direction:column;gap:12px;
+  }
+  .shipmates{
+    background:linear-gradient(180deg,#fff,#f9f3e8);padding:12px;border-radius:var(--radius);box-shadow:var(--shadow);
+  }
+  .shipmate{display:flex;gap:10px;align-items:center;padding:8px;border-radius:8px;background:rgba(0,0,0,0.02)}
+  .shipmate img{width:44px;height:44px;border-radius:999px;border:2px solid var(--panel)}
+  .shipmate .name{font-weight:700}
+  .shipmate .meta{font-size:0.85rem;color:var(--muted)}
+
+  /* Modal */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:60}
+  .modal{width:880px;background:linear-gradient(180deg,#fff,#f7efe0);border-radius:14px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,0.35);display:grid;grid-template-columns:360px 1fr;gap:14px}
+  .custom-preview{background:linear-gradient(180deg,#fff,#f3e9d8);border-radius:10px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .preview-stage{width:300px;height:420px;border-radius:10px;border:4px solid var(--panel);background:linear-gradient(180deg,#fff,#f6efe0);position:relative;overflow:hidden}
+  .layer-img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+  .controls{padding:8px;display:flex;flex-direction:column;gap:8px;overflow:auto}
+  .control-row{display:flex;gap:8px;align-items:center}
+  .swatch{width:36px;height:36px;border-radius:8px;border:2px solid rgba(0,0,0,0.06);cursor:pointer}
+  .option-list{display:flex;gap:8px;flex-wrap:wrap}
+  .option{width:64px;height:64px;border-radius:8px;background:#fff;border:2px solid rgba(0,0,0,0.04);display:grid;place-items:center;cursor:pointer}
+  .option.selected{outline:3px solid var(--gold)}
+  .modal-footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+
+  /* small helpers */
+  .muted{color:var(--muted)}
+  input[type="text"],textarea{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:transparent}
+  .row{display:flex;gap:8px;align-items:center}
+  .file-input{display:flex;gap:8px;align-items:center}
+  .danger{background:#ff6b6b;color:#fff}
+  @media (max-width:980px){
+    .app{flex-direction:column;padding:16px}
+    .modal{width:92%;grid-template-columns:1fr}
+    .left{width:100%}
+    .right{width:100%}
+  }
+
+
+  /* Navigation Bar */
+  .navbar {
+    width: 100%;
+    background: var(--beige);
+    border-bottom: 2px solid var(--dark-green);
+    padding: 5px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Almendra", serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  body.dark .navbar {
+    background: var(--dark-bg);
+    border-bottom-color: var(--gold);
+  }
+
+  .nav-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--dark-green);
+    flex: 1;
+  }
+
+  body.dark .nav-logo {
+    color: var(--gold);
+  }
+
+  .nav-links {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    flex: 2;
+    margin: 0px;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--dark-green);
+    font-size: 16px;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--deep-red);
+  }
+
+  .nav-right {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 100px;
+  }
+
+  body.dark .nav-links a {
+    color: var(--text-light);
+  }
+
+  .dark-toggle {
+    padding: 6px 10px;
+    border: 2px solid var(--dark-green);
+    background: var(--beige);
+    cursor: pointer;
+    font-family: "Almendra", serif;
+    color: var(--dark-green);
+    font-weight: bold;
+    transition: 0.3s;
+    pointer-events: auto;
+    z-index: 1001;
+    position: relative;
+  }
+
+  body.dark .dark-toggle {
+    background: var(--card-dark);
+    color: var(--text-light);
+    border-color: var(--gold);
+  }
+
+  .dark-toggle:hover {
+    background-color: var(--gold);
+    color: var(--text-dark);
+  }
+
+  body.dark .dark-toggle:hover {
+    background-color: var(--deep-red);
+  }
+
+  /* small screens */
+  @media (max-width: 900px) {
+    .sidebar {
+      width: 100%;
+    }
+
+    .main {
+      width: 100%;
+    }
+  }
+</style>
+
+
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-logo"><a href="StudentDashboard.html"><img src="logo-2.png" alt="RevoLoot" width="100px"></a></div>
+    
+    <div class="nav-links">
+        <a href="about.html">About</a>
+        <a href="Resources Page.html">Resources</a>
+        <a href="Schedule Page.html">Schedule</a>
+        <button class="dark-toggle" id="darkToggle">Dark Mode</button>
+    </div>
+   
+    <div class="nav-right"></div>
+</nav>
+<div class="app" id="app">
+  <div class="left card">
+    <div class="avatar-wrap">
+      <button id="avatarBtn" class="avatar-btn" title="Click to customize your pirate avatar">
+        <!-- Layered preview images (placeholders). These are clickable and will open the modal. -->
+        <img class="layer" id="layer-backhair" src="" alt="">
+        <img class="layer" id="layer-body" src="" alt="">
+        <img class="layer" id="layer-bg" src="" alt="" >
+        <img class="layer" id="layer-bottoms" src="" alt="">
+        <img class="layer" id="layer-tops" src="" alt="">
+        <img class="layer" id="layer-eyes" src="" alt="">
+        <img class="layer" id="layer-mouth" src="" alt="">
+        <img class="layer" id="layer-accessory1" src="" alt="">
+        <img class="layer" id="layer-accessory2" src="" alt="">
+        <img class="layer" id="layer-accessory3" src="" alt="">
+        <img class="layer" id="layer-fronthair" src="" alt="">
+        <img class="layer" id="layer-accessory4" src="" alt="">
+      </button>
+      <div class="avatar-meta">
+        <div class="username" contenteditable="true" id="username">Captain Learner</div>
+        <div class="bio" id="bio" contenteditable="true">History buff, treasure hunter of knowledge.</div>
+        <div style="margin-top:8px">
+          <strong class="muted">Struggling topics</strong>
+          <div class="topics" id="topics">
+            <div class="topic" data-topic="Ancient">Ancient</div>
+            <div class="topic" data-topic="WW1">World War I</div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:10px">
+      <strong class="muted">Import assignments</strong>
+      <div class="file-input" style="margin-top:8px">
+        <input type="file" id="csvFile" accept=".csv" />
+        <button class="btn small" id="importBtn">Import</button>
+      </div>
+      <div style="margin-top:8px">
+        <textarea id="csvPaste" rows="3" placeholder="Or paste CSV: title,due(YYYY-MM-DD),progress(0-100)"></textarea>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <button class="btn small" id="pasteImport">Parse CSV</button>
+          <button class="btn small ghost" id="clearAssignments">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="center">
+    <div class="card">
+      <h3>Assignments</h3>
+      <div class="assignments-list" id="assignments"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+        <input type="text" id="newTitle" placeholder="New assignment title" />
+        <input type="date" id="newDue" />
+        <button class="btn small" id="addAssignment">Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Calendar</h3>
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+        <input type="date" id="eventDate" />
+        <input type="text" id="eventTitle" placeholder="Event title (e.g., Live Study)" />
+        <button class="btn small" id="addEvent">Add Event</button>
+      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+      <div style="margin-top:10px">
+        <strong class="muted">Upcoming</strong>
+        <div id="upcomingList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="shipmates card">
+      <h3>Shipmates</h3>
+      <div id="shipmateList"></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <input type="text" id="shipmateName" placeholder="Add shipmate name" />
+        <button class="btn small" id="addShipmate">Add</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Quick actions</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn ghost" id="openAvatar">Customize Avatar</button>
+        <button class="btn ghost" id="exportState">Export Profile</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Avatar customization modal -->
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Avatar customization">
+    <div class="custom-preview">
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+        <strong style="color:var(--panel)">Customize Pirate</strong>
+        
+      </div>
+      <div class="preview-stage" id="previewStage">
+        <!-- Layered preview inside modal -->
+        <img class="layer-img" id="m-backhair" src="" alt="">
+        <img class="layer-img" id="m-body" src="" alt="">
+        <img class="layer-img" id="m-bg" src="" alt="">
+        <img class="layer-img" id="m-bottoms" src="" alt="">
+        <img class="layer-img" id="m-tops" src="" alt="">
+        <img class="layer-img" id="m-eyes" src="" alt="">
+        <img class="layer-img" id="m-mouth" src="" alt="">
+        <img class="layer-img" id="m-accessory1" src="" alt="">
+        <img class="layer-img" id="m-accessory2" src="" alt="">
+        <img class="layer-img" id="m-accessory3" src="" alt="">
+        <img class="layer-img" id="m-fronthair" src="" alt="">
+        <img class="layer-img" id="m-accessory4" src="" alt="">
+      </div>
+      <div style="width:100%;display:flex;gap:8px;justify-content:space-between" class="modal-footer">
+        <div class="muted">Click to apply • Double-click to remove</div>
+        <div>
+          <button class="btn small" id="saveAvatar">Save</button>
+          <button class="btn small ghost" id="closeModal">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="control-row">
+        <strong>Layers</strong>
+      </div>
+
+      <!-- Hair (front/back) -->
+      <div>
+        <div class="muted">Back Hair</div>
+        <div class="option-list" id="backHairList"></div>
+      </div>
+
+      <div>
+        <div class="muted">Front Hair</div>
+        <div class="option-list" id="frontHairList"></div>
+      </div>
+
+      <div>
+        <div class="muted">Eyes</div>
+        <div class="option-list" id="eyesList"></div>
+      </div>
+
+      <div>
+        <div class="muted">Mouth</div>
+        <div class="option-list" id="mouthList"></div>
+      </div>
+
+      <div>
+        <div class="muted">Tops</div>
+        <div class="option-list" id="topsList"></div>
+      </div>
+
+      <div>
+        <div class="muted">Bottoms</div>
+        <div class="option-list" id="bottomsList"></div>
+      </div>
+
+      <div>
+        <div class="muted">Accessories</div>
+        <div class="option-list" id="accessoriesList"></div>
+      </div>
+
+      <div>
+        <div class="muted">Body</div>
+        <div class="option-list" id="bodyList"></div>
+      </div>
+
+      <div style="margin-top:8px">
+        
+      </div>
+
+      <div style="margin-top:8px">
+        <div class="muted">Upload custom asset (PNG with transparency)</div>
+        <input type="file" id="assetUpload" accept="image/png" />
+        <div class="muted" style="font-size:0.85rem">Tip: name files like <code>hair-front-1.png</code> to keep organized.</div>
+      </div>
+
+      <div style="margin-top:8px">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------------------
+   Data model & persistence
+   --------------------------- */
+const STORAGE_KEY = 'pirate_dashboard_v1';
+const defaultState = {
+  profile: {
+    username: 'Captain Learner',
+    bio: 'History buff, treasure hunter of knowledge.',
+    topics: ['Ancient'],
+    avatar: {
+      // asset keys (strings) map to image URLs or data URLs
+      bg: 'background.png', // optional background layer
+      backhair: '', fronthair: '', eyes: '', mouth: '', tops: '', bottoms: '', accessory: '',
+     
+    }
+  },
+  assignments: [
+    // {id,title,due,progress}
+  ],
+  events: [
+    // {id,title,date,type}
+  ],
+  shipmates: [
+    // {id,name,avatar}
+  ]
+};
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return JSON.parse(JSON.stringify(defaultState));
+    return JSON.parse(raw);
+  }catch(e){
+    console.error('loadState',e);
+    return JSON.parse(JSON.stringify(defaultState));
+  }
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+let state = loadState();
+
+/* ---------------------------
+   Asset placeholders
+   Replace these with your hand-drawn asset URLs or data URLs.
+   Each array item should be a URL string (relative path or data URL).
+   Example: 'assets/hair-back-1.png'
+   --------------------------- */
+const ASSETS = {
+  backHair: [
+    /* 6 back hair assets */
+    'back-hair1.png', 'back-hair2.png', 'back-hair3.png', 'back-hair4.png',
+  ],
+  frontHair: [
+    /* 6 front hair assets */
+    'front-hair1.png', 'front-hair2.png', 'front-hair3.png', 'front-hair4.png', 'front-hair5.png', 
+  ],
+  eyes: [
+    'eye1.png', 'eye2.png', 'eye3.png', 'eye4.png', 'eye5.png', 'eye6.png', 
+  ],
+  mouths: [
+    'mouth1.png', 'mouth2.png', 'mouth3.png', 'mouth4.png', 'mouth5.png', 'mouth6.png'
+  ],
+  tops: [
+    'top1.png', 'top2.png' /* 2 tops */
+  ],
+  bottoms: [
+    'bottom1.png', 'bottom2.png', 'bottom3.png' /* 3 bottoms */
+  ],
+  accessories: [
+    'Ac1.png', 'Ac2.png', 'Ac3.png', 'Ac4.png' /* 4 accessories */
+  ],
+  body: [
+    'Body1.png', 'Body2.png', 'Body3.png', 'Body4.png' /* 4 body options */
+  ],
+};
+const AVATAR_CANVAS_SIZE = { width: 2000, height: 2703 };
+const COLOR_PALETTES = {
+  hair: ['#3a2720', '#a56f3f', '#f3d497', '#1e1e1e', '#6b3b2e', '#ffffff'],
+  eyes: ['#2f4f4f', '#1c3d7a', '#7f3f9d', '#5a2e1a', '#2c6e2e', '#000000'],
+  clothing: ['#8b1f1f', '#2f3b2f', '#d4a017', '#4a6b8b', '#b85d1e', '#6a3f5e']
+};
+
+function ensureAvatarColorState(){
+  if(!state.profile.avatarColors){
+    state.profile.avatarColors = {
+      hair: COLOR_PALETTES.hair[0],
+      eyes: COLOR_PALETTES.eyes[0],
+      clothing: COLOR_PALETTES.clothing[0]
+    };
+  }
+}
+
+// Helper function to convert hex color to hue rotation degrees
+function getHueRotation(hexColor){
+  const hex = hexColor.replace('#', '');
+  const r = parseInt(hex.substr(0, 2), 16) / 255;
+  const g = parseInt(hex.substr(2, 2), 16) / 255;
+  const b = parseInt(hex.substr(4, 2), 16) / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  if (max !== min) {
+    const d = max - min;
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+  }
+  return Math.round(h * 360);
+}
+
+function injectCustomStyles(){
+  const css = `
+    .modal { max-height: calc(100vh - 24px); overflow: hidden; }
+    .controls { max-height: calc(100vh - 220px); overflow: auto; }
+    .preview-stage { max-width: 100%; max-height: calc(100vh - 220px); }
+    .color-swatch { width: 28px; height: 28px; border-radius: 8px; border: 2px solid rgba(0,0,0,0.08); cursor: pointer; }
+    .color-swatch.selected { outline: 3px solid var(--gold); }
+    .color-panel { display: flex; flex-direction: column; gap: 8px; }
+    .color-panel .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .avatar-res-note { font-size: 0.85rem; color: var(--muted); margin-top: 6px; }
+  `;
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+}
+
+function makeColorPanel(label, type, palette){
+  const wrapper = document.createElement('div');
+  wrapper.className = 'color-panel';
+  const heading = document.createElement('div');
+  heading.className = 'muted';
+  heading.innerText = label;
+  const row = document.createElement('div');
+  row.className = 'row';
+  palette.forEach(color => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch';
+    sw.dataset.type = type;
+    sw.dataset.color = color;
+    sw.style.background = color;
+    sw.title = color;
+    sw.addEventListener('click', () => {
+      state.profile.avatarColors[type] = color;
+      saveState();
+      refreshColorSwatches();
+      updateAvatarColorPreview();
+    });
+    row.appendChild(sw);
+  });
+  wrapper.appendChild(heading);
+  wrapper.appendChild(row);
+  return wrapper;
+}
+
+function buildColorControls(){
+  const controls = document.querySelector('.controls');
+  if(!controls || document.getElementById('colorControls')) return;
+
+  const section = document.createElement('div');
+  section.id = 'colorControls';
+  section.style.display = 'grid';
+  section.style.gap = '14px';
+
+  
+
+
+
+  const assetSection = Array.from(controls.children).find(el => el.querySelector && el.querySelector('#assetUpload'));
+  controls.insertBefore(section, assetSection || controls.lastChild);
+  refreshColorSwatches();
+}
+
+function refreshColorSwatches(){
+  document.querySelectorAll('.color-swatch').forEach(el => {
+    const type = el.dataset.type;
+    el.classList.toggle('selected', state.profile.avatarColors[type] === el.dataset.color);
+  });
+}
+
+function setAvatarImageResolution(){
+  const allIds = previewIds.concat(modalPreviewIds);
+  allIds.forEach(id => {
+    const el = document.getElementById(id);
+    if(el){
+      el.width = AVATAR_CANVAS_SIZE.width;
+      el.height = AVATAR_CANVAS_SIZE.height;
+    }
+  });
+}
+
+function updateAvatarColorPreview(){
+  const previewStage = document.getElementById('previewStage');
+  const hair = state.profile.avatarColors.hair || COLOR_PALETTES.hair[0];
+  const clothing = state.profile.avatarColors.clothing || COLOR_PALETTES.clothing[0];
+  
+
+  avatarBtn.style.background = `<img src="${state.profile.avatar.bg || background.png}" style="width:100%;height:100%;object-fit:cover;filter:hue-rotate(${getHueRotation(hair)}deg) saturate(150%)">`;
+  if(previewStage){
+    previewStage.style.background = `background.png`;
+    previewStage.style.borderColor = clothing;
+  }
+
+  refreshColorSwatches();
+  setAvatarImageResolution();
+}
+
+const originalInit = init;
+init = function(){
+  originalInit();
+  ensureAvatarColorState();
+  injectCustomStyles();
+  buildColorControls();
+  updateAvatarColorPreview();
+};
+
+const originalOpenModal = openModal;
+openModal = function(){
+  originalOpenModal();
+  updateAvatarColorPreview();
+};
+/* ---------------------------
+   Utility helpers
+   --------------------------- */
+function uid(prefix='id'){return prefix + '_' + Math.random().toString(36).slice(2,9)}
+function formatDate(d){ // YYYY-MM-DD
+  const dt = new Date(d);
+  if(isNaN(dt)) return '';
+  return dt.toISOString().slice(0,10);
+}
+
+/* ---------------------------
+   DOM references
+   --------------------------- */
+const avatarBtn = document.getElementById('avatarBtn');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const closeModalBtn = document.getElementById('closeModal');
+const openAvatarBtn = document.getElementById('openAvatar');
+const saveAvatarBtn = document.getElementById('saveAvatar');
+
+const layerIds = ['backhair','body','bg','bottoms','tops','eyes','mouth','accessory1','accessory2','accessory3','fronthair','accessory4'];
+const previewIds = layerIds.map(l => 'layer-' + l);
+const modalPreviewIds = layerIds.map(l => 'm-' + l);
+
+const usernameEl = document.getElementById('username');
+const bioEl = document.getElementById('bio');
+const topicsEl = document.getElementById('topics');
+
+const assignmentsEl = document.getElementById('assignments');
+const addAssignmentBtn = document.getElementById('addAssignment');
+const newTitleEl = document.getElementById('newTitle');
+const newDueEl = document.getElementById('newDue');
+const csvFileInput = document.getElementById('csvFile');
+const importBtn = document.getElementById('importBtn');
+const csvPaste = document.getElementById('csvPaste');
+const pasteImportBtn = document.getElementById('pasteImport');
+const clearAssignmentsBtn = document.getElementById('clearAssignments');
+
+const calendarGrid = document.getElementById('calendarGrid');
+const upcomingList = document.getElementById('upcomingList');
+const eventDateEl = document.getElementById('eventDate');
+const eventTitleEl = document.getElementById('eventTitle');
+const addEventBtn = document.getElementById('addEvent');
+
+const shipmateListEl = document.getElementById('shipmateList');
+const addShipmateBtn = document.getElementById('addShipmate');
+const shipmateNameEl = document.getElementById('shipmateName');
+
+const exportStateBtn = document.getElementById('exportState');
+
+const assetUpload = document.getElementById('assetUpload');
+
+/* ---------------------------
+   Initialize UI
+   --------------------------- */
+function init(){
+  // profile fields
+  usernameEl.innerText = state.profile.username;
+  bioEl.innerText = state.profile.bio;
+  // topics
+  Array.from(topicsEl.querySelectorAll('.topic')).forEach(el=>{
+    const t = el.dataset.topic;
+    if(state.profile.topics.includes(t)) el.classList.add('active');
+    el.addEventListener('click',()=>{
+      el.classList.toggle('active');
+      const t = el.dataset.topic;
+      if(el.classList.contains('active')){
+        if(!state.profile.topics.includes(t)) state.profile.topics.push(t);
+      } else {
+        state.profile.topics = state.profile.topics.filter(x=>x!==t);
+      }
+      saveState();
+    });
+  });
+
+  // editable username/bio
+  usernameEl.addEventListener('input',()=>{ state.profile.username = usernameEl.innerText; saveState(); });
+  bioEl.addEventListener('input',()=>{ state.profile.bio = bioEl.innerText; saveState(); });
+
+  // avatar click opens modal
+  avatarBtn.addEventListener('click', openModal);
+  openAvatarBtn.addEventListener('click', openModal);
+  closeModalBtn.addEventListener('click', closeModal);
+  saveAvatarBtn.addEventListener('click', ()=>{ applyModalToAvatar(); closeModal(); });
+
+  // assignments
+  renderAssignments();
+  addAssignmentBtn.addEventListener('click', addAssignmentFromInputs);
+  importBtn.addEventListener('click', handleFileImport);
+  pasteImportBtn.addEventListener('click', ()=>{ parseCSVText(csvPaste.value); });
+  clearAssignmentsBtn.addEventListener('click', ()=>{ state.assignments=[]; saveState(); renderAssignments(); });
+
+  // calendar
+  renderCalendar();
+  addEventBtn.addEventListener('click', addEventFromInputs);
+
+  // shipmates
+  renderShipmates();
+  addShipmateBtn.addEventListener('click', addShipmate);
+
+  // export
+  exportStateBtn.addEventListener('click', ()=>{ const data = JSON.stringify(state, null, 2); prompt('Copy profile JSON', data); });
+
+  // asset upload
+  assetUpload.addEventListener('change', handleAssetUpload);
+
+  // populate modal option lists
+  populateOptions();
+
+  // initial avatar preview
+  updateAvatarPreview();
+}
+
+/* ---------------------------
+   Avatar preview & modal logic
+   --------------------------- */
+  function updateAvatarPreview(){
+    // update layered images in main avatar button
+    layerIds.forEach(id=>{
+      const el = document.getElementById('layer-' + id);
+      const src = state.profile.avatar[id] || (id === 'bg' ? 'background.png' : '');
+      if(src){
+        el.src = src;
+        el.style.opacity = 1;
+      } else {
+        el.src = '';
+        el.style.opacity = 0;
+      }
+    });
+    
+  }
+
+function openModal(){
+  // populate modal preview with current avatar
+  layerIds.forEach(id=>{
+    const el = document.getElementById('m-' + id);
+    const src = state.profile.avatar[id] || (id === 'bg' ? 'background.png' : '');
+    el.src = src;
+    el.style.opacity = src ? 1 : 0;
+  });
+  // skin
+  document.querySelectorAll('.swatch').forEach(s=>{
+    s.classList.toggle('selected', s.dataset.skin === state.profile.avatar.skin);
+  });
+  modalBackdrop.style.display = 'flex';
+  modalBackdrop.setAttribute('aria-hidden','false');
+}
+
+function closeModal(){
+  modalBackdrop.style.display = 'none';
+  modalBackdrop.setAttribute('aria-hidden','true');
+}
+
+function applyModalToAvatar(){
+  // copy modal preview layers into state
+  layerIds.forEach(id=>{
+    const el = document.getElementById('m-' + id);
+    state.profile.avatar[id] = el.src || '';
+  });
+  // skin
+  const selectedSkin = document.querySelector('.swatch.selected');
+  if(selectedSkin) state.profile.avatar.skin = selectedSkin.dataset.skin;
+  saveState();
+  updateAvatarPreview();
+}
+
+/* ---------------------------
+   Populate modal option lists
+   --------------------------- */
+function populateOptions(){
+  // helper to create option element
+  function makeOption(src, container, layerKey){
+    const div = document.createElement('div');
+    div.className = 'option';
+    const img = document.createElement('img');
+    img.src = src || '';
+    img.alt = '';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'contain';
+    div.appendChild(img);
+    div.addEventListener('click', ()=>{
+      // set modal preview layer
+      const preview = document.getElementById('m-' + layerKey);
+      preview.src = src;
+      preview.style.opacity = src ? 1 : 0;
+      // mark selected
+      container.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+      div.classList.add('selected');
+    });
+    // Double-click to remove asset from avatar
+    div.addEventListener('dblclick', (e)=>{
+      e.stopPropagation();
+      // Clear modal preview layer
+      const preview = document.getElementById('m-' + layerKey);
+      preview.src = '';
+      preview.style.opacity = 0;
+      // Remove selected state from all options in this container
+      container.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+    });
+    container.appendChild(div);
+  }
+
+  // back hair
+  const backHairList = document.getElementById('backHairList');
+  backHairList.innerHTML = '';
+  ASSETS.backHair.forEach(src => makeOption(src, backHairList, 'backhair'));
+  // front hair
+  const frontHairList = document.getElementById('frontHairList');
+  frontHairList.innerHTML = '';
+  ASSETS.frontHair.forEach(src => makeOption(src, frontHairList, 'fronthair'));
+  // eyes
+  const eyesList = document.getElementById('eyesList');
+  eyesList.innerHTML = '';
+  ASSETS.eyes.forEach(src => makeOption(src, eyesList, 'eyes'));
+  // mouths
+  const mouthList = document.getElementById('mouthList');
+  mouthList.innerHTML = '';
+  ASSETS.mouths.forEach(src => makeOption(src, mouthList, 'mouth'));
+  // tops
+  const topsList = document.getElementById('topsList');
+  topsList.innerHTML = '';
+  ASSETS.tops.forEach(src => makeOption(src, topsList, 'tops'));
+  // bottoms
+  const bottomsList = document.getElementById('bottomsList');
+  bottomsList.innerHTML = '';
+  ASSETS.bottoms.forEach(src => makeOption(src, bottomsList, 'bottoms'));
+  // accessories - map each to a numbered slot (accessory1, accessory2, accessory3, accessory4)
+  const accessoriesList = document.getElementById('accessoriesList');
+  accessoriesList.innerHTML = '';
+  ASSETS.accessories.forEach((src, index) => {
+    const layerKey = 'accessory' + (index + 1);
+    makeOption(src, accessoriesList, layerKey);
+  });
+
+  // body
+  const bodyList = document.getElementById('bodyList');
+  bodyList.innerHTML = '';
+  ASSETS.body.forEach(src => makeOption(src, bodyList, 'body'));
+}
+
+/* ---------------------------
+   Asset upload handler
+   - Accepts PNG and stores as data URL in the appropriate layer if filename contains layer hint.
+   - Filenames should include keywords: backhair, fronthair, eyes, mouth, tops, bottoms, accessory,body
+   --------------------------- */
+function handleAssetUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const dataUrl = ev.target.result;
+    const name = file.name.toLowerCase();
+    // heuristics to place into ASSETS arrays
+    if(name.includes('back') || name.includes('backhair')) ASSETS.backHair.push(dataUrl);
+    else if(name.includes('front') || name.includes('fronthair')) ASSETS.frontHair.push(dataUrl);
+    else if(name.includes('eye')) ASSETS.eyes.push(dataUrl);
+    else if(name.includes('mouth')) ASSETS.mouths.push(dataUrl);
+    else if(name.includes('top')) ASSETS.tops.push(dataUrl);
+    else if(name.includes('bottom')) ASSETS.bottoms.push(dataUrl);
+    else if(name.includes('access') || name.includes('acc')) ASSETS.accessories.push(dataUrl);
+    else {  
+      // fallback: push to accessories
+      ASSETS.accessories.push(dataUrl);
+    }
+    populateOptions();
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ---------------------------
+   Assignments logic
+   --------------------------- */
+function renderAssignments(){
+  assignmentsEl.innerHTML = '';
+  if(state.assignments.length === 0){
+    assignmentsEl.innerHTML = '<div class="muted">No assignments yet. Import or add one.</div>';
+    return;
+  }
+  state.assignments.sort((a,b)=> new Date(a.due) - new Date(b.due));
+  state.assignments.forEach(a=>{
+    const div = document.createElement('div');
+    div.className = 'assignment';
+    const meta = document.createElement('div'); meta.className='meta';
+    const title = document.createElement('div'); title.className='title'; title.innerText = a.title;
+    const due = document.createElement('div'); due.className='due'; due.innerText = 'Due: ' + formatDate(a.due);
+    meta.appendChild(title); meta.appendChild(due);
+
+    const progressWrap = document.createElement('div');
+    progressWrap.className = 'progress';
+    const bar = document.createElement('i');
+    bar.style.width = (a.progress || 0) + '%';
+    progressWrap.appendChild(bar);
+
+    const actions = document.createElement('div'); actions.className='actions';
+    const inc = document.createElement('button'); inc.className='btn small'; inc.innerText = '+10';
+    inc.addEventListener('click', ()=>{ a.progress = Math.min(100,(a.progress||0)+10); saveState(); renderAssignments(); });
+    const dec = document.createElement('button'); dec.className='btn small ghost'; dec.innerText = '-10';
+    dec.addEventListener('click', ()=>{ a.progress = Math.max(0,(a.progress||0)-10); saveState(); renderAssignments(); });
+    const del = document.createElement('button'); del.className='btn small danger'; del.innerText = 'Delete';
+    del.addEventListener('click', ()=>{ state.assignments = state.assignments.filter(x=>x.id!==a.id); saveState(); renderAssignments(); });
+
+    actions.appendChild(inc); actions.appendChild(dec); actions.appendChild(del);
+
+    div.appendChild(meta);
+    div.appendChild(progressWrap);
+    div.appendChild(actions);
+    assignmentsEl.appendChild(div);
+  });
+}
+
+function addAssignmentFromInputs(){
+  const title = newTitleEl.value.trim();
+  const due = newDueEl.value;
+  if(!title || !due) return alert('Please provide title and due date.');
+  state.assignments.push({id:uid('a'),title,due,progress:0});
+  newTitleEl.value=''; newDueEl.value='';
+  saveState(); renderAssignments(); renderCalendar();
+}
+
+/* CSV parsing: expects lines like title,due(YYYY-MM-DD),progress */
+function parseCSVText(text){
+  if(!text) return;
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  lines.forEach(line=>{
+    const parts = line.split(',');
+    const title = parts[0]?.trim() || 'Untitled';
+    const due = parts[1]?.trim() || formatDate(new Date());
+    const progress = parseInt(parts[2]) || 0;
+    state.assignments.push({id:uid('a'),title,due,progress});
+  });
+  saveState(); renderAssignments(); renderCalendar();
+}
+
+/* File import */
+function handleFileImport(){
+  const f = csvFileInput.files[0];
+  if(!f) return alert('Choose a CSV file first.');
+  const reader = new FileReader();
+  reader.onload = function(e){
+    parseCSVText(e.target.result);
+  };
+  reader.readAsText(f);
+}
+
+/* ---------------------------
+   Calendar logic
+   - Simple month grid for current month
+   - Events include assignments (deadlines) and user events
+   --------------------------- */
+function getMonthMatrix(year,month){
+  // returns array of 42 date objects for grid
+  const first = new Date(year,month,1);
+  const startDay = first.getDay(); // 0-6 (Sun-Sat)
+  const startDate = new Date(year,month,1 - startDay);
+  const arr = [];
+  for(let i=0;i<42;i++){
+    const d = new Date(startDate); d.setDate(startDate.getDate()+i);
+    arr.push(d);
+  }
+  return arr;
+}
+
+function renderCalendar(){
+  calendarGrid.innerHTML = '';
+  const now = new Date();
+  const matrix = getMonthMatrix(now.getFullYear(), now.getMonth());
+  matrix.forEach(d=>{
+    const day = document.createElement('div'); day.className='day';
+    const dateLabel = document.createElement('div'); dateLabel.className='date'; dateLabel.innerText = d.getDate();
+    day.appendChild(dateLabel);
+
+    // find events on this date
+    const dateKey = formatDate(d);
+    const events = [
+      ...state.events.filter(e=>e.date === dateKey),
+      ...state.assignments.filter(a=>formatDate(a.due) === dateKey).map(a=>({id:a.id,title:a.title,type:'assignment'}))
+    ];
+    events.forEach(ev=>{
+      const pill = document.createElement('span');
+      pill.className = 'event-pill';
+      pill.innerText = (ev.type === 'assignment' ? '⚓ ' : '📚 ') + ev.title;
+      pill.addEventListener('click', ()=>{
+        if(confirm('Delete this event?')) {
+          if(ev.type === 'assignment'){
+            state.assignments = state.assignments.filter(x=>x.id!==ev.id);
+          } else {
+            state.events = state.events.filter(x=>x.id!==ev.id);
+          }
+          saveState(); renderAssignments(); renderCalendar();
+        }
+      });
+      day.appendChild(pill);
+    });
+
+    calendarGrid.appendChild(day);
+  });
+
+  // upcoming list (next 10)
+  const upcoming = [
+    ...state.events.map(e=>({...e,when:new Date(e.date),kind:'event'})),
+    ...state.assignments.map(a=>({id:a.id,title:a.title,when:new Date(a.due),kind:'assignment',progress:a.progress}))
+  ].filter(x=>!isNaN(x.when)).sort((a,b)=>a.when-b.when).slice(0,10);
+
+  upcomingList.innerHTML = '';
+  upcoming.forEach(u=>{
+    const div = document.createElement('div');
+    div.style.display='flex';div.style.justifyContent='space-between';div.style.alignItems='center';div.style.padding='6px 0';
+    const left = document.createElement('div');
+    left.innerHTML = `<strong>${u.title}</strong><div class="muted">${formatDate(u.when)}</div>`;
+    const right = document.createElement('div');
+    if(u.kind === 'assignment'){
+      const p = document.createElement('div'); p.className='progress'; p.style.width='120px';
+      const i = document.createElement('i'); i.style.width = (u.progress||0)+'%';
+      p.appendChild(i); right.appendChild(p);
+    } else {
+      const del = document.createElement('button'); del.className='btn small danger'; del.innerText='Delete';
+      del.addEventListener('click', ()=>{ state.events = state.events.filter(x=>x.id!==u.id); saveState(); renderCalendar(); });
+      right.appendChild(del);
+    }
+    div.appendChild(left); div.appendChild(right);
+    upcomingList.appendChild(div);
+  });
+}
+
+function addEventFromInputs(){
+  const date = eventDateEl.value;
+  const title = eventTitleEl.value.trim();
+  if(!date || !title) return alert('Provide date and title.');
+  state.events.push({id:uid('e'),title,date,type:'study'});
+  eventDateEl.value=''; eventTitleEl.value='';
+  saveState(); renderCalendar();
+}
+
+/* ---------------------------
+   Shipmates (friends) feature
+   --------------------------- */
+function renderShipmates(){
+  shipmateListEl.innerHTML = '';
+  if(state.shipmates.length === 0){
+    shipmateListEl.innerHTML = '<div class="muted">No shipmates yet. Add a friend to study with.</div>';
+    return;
+  }
+  state.shipmates.forEach(s=>{
+    const div = document.createElement('div'); div.className='shipmate';
+    const img = document.createElement('img'); img.src = s.avatar || '';
+    const info = document.createElement('div'); info.style.flex='1';
+    const name = document.createElement('div'); name.className='name'; name.innerText = s.name;
+    const meta = document.createElement('div'); meta.className='meta muted'; meta.innerText = 'Online';
+    info.appendChild(name); info.appendChild(meta);
+    const remove = document.createElement('button'); remove.className='btn small danger'; remove.innerText='Remove';
+    remove.addEventListener('click', ()=>{ state.shipmates = state.shipmates.filter(x=>x.id!==s.id); saveState(); renderShipmates(); });
+    div.appendChild(img); div.appendChild(info); div.appendChild(remove);
+    shipmateListEl.appendChild(div);
+  });
+}
+
+function addShipmate(){
+  const name = shipmateNameEl.value.trim();
+  if(!name) return;
+  state.shipmates.push({id:uid('s'),name,avatar:''});
+  shipmateNameEl.value='';
+  saveState(); renderShipmates();
+}
+
+/* ---------------------------
+   Initial population of some demo data (only if empty)
+   --------------------------- */
+(function seedIfEmpty(){
+  let changed=false;
+  if(state.assignments.length===0){
+    state.assignments.push({id:uid('a'),title:'Read Chapter 4: Empires',due:formatDate(new Date(Date.now()+3*24*3600*1000)),progress:20});
+    state.assignments.push({id:uid('a'),title:'Essay: Causes of Revolution',due:formatDate(new Date(Date.now()+7*24*3600*1000)),progress:5});
+    changed=true;
+  }
+  if(state.events.length===0){
+    state.events.push({id:uid('e'),title:'Live Study: Medieval History',date:formatDate(new Date(Date.now()+2*24*3600*1000)),type:'live'});
+    changed=true;
+  }
+  if(state.shipmates.length===0){
+    state.shipmates.push({id:uid('s'),name:'Sailing Jane',avatar:''});
+    state.shipmates.push({id:uid('s'),name:'Calico Jack',avatar:''});
+    changed=true;
+  }
+  if(changed) saveState();
+})();
+
+/* ---------------------------
+   Wire up modal preview click-to-change behavior
+   - Clicking the main avatar opens modal; clicking the modal preview layers toggles selection
+   --------------------------- */
+document.querySelectorAll('.option').forEach(()=>{}); // noop to avoid linter
+
+/* ---------------------------
+   Start
+   --------------------------- */
+init();
+</script>
+<script>
+  // Dark mode toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    const darkToggle = document.getElementById('darkToggle');
+    if (darkToggle) {
+      darkToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        document.body.classList.toggle('dark');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+      });
+      
+      // Restore dark mode preference
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark');
+      }
+    }
+  });
+</script>
+</body>
+</html>
