@@ -399,6 +399,30 @@
   }
 </style>
 
+  <style>
+    .avatar-btn {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 12px;
+  border: 4px solid var(--panel);
+  background: url('background.png') no-repeat center center / cover;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.avatar-btn img.layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+  </style>
 
 </head>
 <body>
