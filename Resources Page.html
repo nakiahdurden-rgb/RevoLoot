@@ -441,7 +441,16 @@
             <input type="checkbox" id="publicToggle" checked>
             Make public to all users
         </label>
+<label>
+            Upload File:
+            <input type="file" id="newFile">
+        </label>
 
+        <p style="text-align: center; margin: 8px 0;">- OR -</p>
+
+        <input id="newUrl" type="text" placeholder="Resource URL (https://...)">
+
+        
         <button id="createBtn">Create</button>
         <button id="cancelBtn">Cancel</button>
     </div>
@@ -533,14 +542,23 @@
                 card.className = "resource-card";
                 const visibility = r.isPublic ? "Public" : "Private";
                 const ownerText = r.owner ? r.owner : "Unknown";
+                
+                const hasContent = r.fileUrl && r.fileUrl.length > 0;
+            
                 card.innerHTML = `
                     <div class="resource-type">${r.type}</div>
                     <div class="resource-title">${r.title}</div>
                     <div class="resource-meta">Owner: ${ownerText} • ${visibility}</div>
                     <div class="resource-actions">
                         <button>Open</button>
+                        ${hasContent ? '<button class="openBtn">Open</button>' : ''}
                     </div>
                 `;
+    if (hasContent) {
+                    const openBtn = card.querySelector(".openBtn");
+                    openBtn.onclick = () => window.open(r.fileUrl, "_blank");
+                }
+                
                 grid.appendChild(card);
             });
     }
@@ -558,6 +576,8 @@
     };
 
     cancelBtn.onclick = () => {
+        document.getElementById("newFile").value = "";
+        document.getElementById("newUrl").value = "";
         modalBg.style.display = "none";
     };
 
@@ -569,19 +589,41 @@
         const title = document.getElementById("newTitle").value.trim();
         const type = document.getElementById("newType").value;
         const isPublic = document.getElementById("publicToggle").checked;
-
+        
+    const fileInput = document.getElementById("newFile");
+        const urlInput = document.getElementById("newUrl").value.trim();
         if (title === "") {
             alert("Please enter a title.");
             return;
         }
 
+ const hasFile = fileInput && fileInput.files.length > 0;
+        const hasUrl = urlInput.length > 0;
+
+        if (!hasFile && !hasUrl) {
+            alert("please upload your resource first");
+            return;
+        }
+
+        let resourceUrl = "";
+        if (hasUrl) {
+            resourceUrl = urlInput;
+        } else if (hasFile) {
+            const file = fileInput.files[0];
+            resourceUrl = URL.createObjectURL(file);
+        }
+
+        
         const newResource = {
             id: Date.now(),
             title,
             type,
             owner: currentUser || "unknown",
             isPublic
+             isPublic,
+            fileUrl: resourceUrl
         };
+    
 
         resources.push(newResource);
         saveResources();
@@ -589,6 +631,8 @@
         document.getElementById("newTitle").value = "";
         document.getElementById("newType").value = "lesson";
         document.getElementById("publicToggle").checked = true;
+        fileInput.value = "";
+        document.getElementById("newUrl").value = "";
         modalBg.style.display = "none";
     };
 
